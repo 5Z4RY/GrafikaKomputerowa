@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+ <style>
+	body 
+	{
+		margin: 0;
+	}
+
+	canvas 
+	{
+    width: 100%;
+    height: 100%;
+	}
+</style> 
+<script src="build/three.js"></script>
+</head>
+<body>
+<script>
+let canvas = document.getElementById("glcanvas");
+
+const scene = new THREE.Scene({color: 0xfff});
+
+const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 1, 1000);
+
+const renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+document.body.appendChild(renderer.domElement);
+
+const light = new THREE.PointLight( 0xffffff, 0.5, 300 );
+light.position.set(-5, -0.5, 0.5);
+camera.add(light);
+scene.add(camera);
+
+const ambientLight = new THREE.AmbientLight( 0x404040 ); // soft white light
+scene.add( ambientLight );
+
+const material = new THREE.MeshPhongMaterial(
+    {
+        color: 0xffffff, 
+    });
+
+let custom_pawn = new THREE.Group();
+
+const baseGeometry = new THREE.ConeGeometry(0.6, 0.4, 100);
+
+const base = new THREE.Mesh(baseGeometry, material);
+base.position.y = 0.2;
+custom_pawn.add(base);
+
+const pawnGeometry_1 = new THREE.CylinderGeometry(0.3,0.3, 0.7, 100);
+const pawnPart_1 = new THREE.Mesh(pawnGeometry_1, material);
+pawnPart_1.position.y=0.7;
+custom_pawn.add(pawnPart_1);
+
+const pawnGeometry_2 = new THREE.CylinderGeometry(0.4, 0.4, 0.15, 100);
+const pawnPart_2 = new THREE.Mesh(pawnGeometry_2, material);
+pawnPart_2.position.y=1.1; 	
+custom_pawn.add(pawnPart_2);
+
+const headGeometry = new THREE.SphereGeometry(0.45, 100, 100);
+const pawnHead = new THREE.Mesh(headGeometry, material);
+pawnHead.position.y=1.6; 
+custom_pawn.add(pawnHead);
+
+custom_pawn.position.set(0,-3,1);
+scene.add(custom_pawn);
+renderer.render(scene, camera);
+
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+
+camera.position.z = 4.5;
+
+animate();
+
+</script>
+</body>
+</html>
